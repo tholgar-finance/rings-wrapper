@@ -6,7 +6,7 @@ import {SafeTransferLib} from "solady/utils/SafeTransferLib.sol";
 import {ReentrancyGuard} from "solady/utils/ReentrancyGuard.sol";
 import {AOperator} from "./abstracts/AOperator.sol";
 import {Owned2Step} from "./utils/Owned2Step.sol";
-import { UtilsLib } from "morpho/libraries/UtilsLib.sol";
+import {UtilsLib} from "morpho/libraries/UtilsLib.sol";
 import {Errors} from "./utils/Errors.sol";
 
 /// @title Wrapper contract
