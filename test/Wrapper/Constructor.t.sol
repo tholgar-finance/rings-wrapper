@@ -15,5 +15,6 @@ contract Constructor is WrapperTest {
         assertEq(wrapper.underlyingAsset(), scUSD);
         assertEq(wrapper.name(), "Wrapped stkscUSD");
         assertEq(wrapper.symbol(), "wstkscUSD");
+        assertEq(wrapper.decimals(), 6);
     }
 }

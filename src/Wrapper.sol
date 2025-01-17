@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity 0.8.28;
 
-import { ERC4626 } from "solady/tokens/ERC4626.sol";
+import { ERC4626, ERC20 } from "solady/tokens/ERC4626.sol";
 import { SafeTransferLib } from "solady/utils/SafeTransferLib.sol";
 import { ReentrancyGuard } from "solady/utils/ReentrancyGuard.sol";
 import { AOperator } from "./abstracts/AOperator.sol";
@@ -64,6 +64,10 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
     //////////////////////////////////////////////////////////////*/
 
     /**
+     * @notice The number of decimals of the vault
+     */
+    uint8 private _decimals;
+    /**
      * @notice The vesting period of the rewards
      */
     uint64 public vestingPeriod;
@@ -112,6 +116,8 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
         feeRecipient = initialFeeRecipient;
         performanceFee = initialPerformanceFee;
         vestingPeriod = initialVestingPeriod;
+
+        _decimals = ERC20(definitiveAsset).decimals();
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -215,6 +221,13 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
      */
     function totalAssets() public view override returns (uint256) {
         return super.totalAssets().zeroFloorSub(lockedProfit()); // handle rounding down of assets
+    }
+
+    /**
+     * @inheritdoc ERC4626
+     */
+    function decimals() public view override returns (uint8) {
+        return _decimals;
     }
 
     /*//////////////////////////////////////////////////////////////
