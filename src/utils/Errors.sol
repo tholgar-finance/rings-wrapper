@@ -15,6 +15,9 @@ library Errors {
     // Call errors
     error CallFailed(bytes reason);
 
+    // Harvest errors
+    error HarvestLoseAssets();
+
     // Fee errors
     error FeeTooHigh();
 }

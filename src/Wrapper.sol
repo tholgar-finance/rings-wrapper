@@ -201,7 +201,8 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
     //////////////////////////////////////////////////////////////*/
 
     /**
-     * @dev asset is the definitive asset of the vault (WAR)
+     * @inheritdoc ERC4626
+     * @dev asset is the definitive asset of the wrapper (stkscUSD)
      */
     function asset() public view override returns (address) {
         return _asset;
@@ -237,28 +238,26 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
      */
     function harvest(address to, bytes calldata inputData) public nonReentrant onlyOperatorOrOwner {
         uint256 assetsBefore = totalAssets();
-
         // Harvest the strategy
         (bool success, bytes memory data) = to.call(inputData);
         if (!success) {
             revert Errors.CallFailed(data);
         }
-
-        // Compute the profit
-        totalAssets() - assetsBefore; // reverts if loose of assets
+        if (totalAssets() < assetsBefore) revert Errors.HarvestLoseAssets();
 
         // Share the profit to the fee recipient
-        uint256 profit = underlyingAsset.balanceOf(address(this));
+        address _underlyingAsset = underlyingAsset;
+        uint256 profit = _underlyingAsset.balanceOf(address(this));
         if (performanceFee != 0) {
             uint256 fee = profit * performanceFee / 1e4;
             profit -= fee;
-            feeRecipient.safeTransfer(asset(), fee);
+            _underlyingAsset.safeTransfer(feeRecipient, fee);
         }
 
         // Deposit the profit in the strategy
-        underlyingAsset.safeApprove(asset(), profit);
-        ITeller(teller).deposit(underlyingAsset, profit, 0);
+        _underlyingAsset.safeApprove(asset(), profit);
+        uint256 sharesOut = ITeller(teller).deposit(_underlyingAsset, profit, 0);
 
-        _handleGain(profit);
+        _handleGain(sharesOut);
     }
 }
