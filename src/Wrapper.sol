@@ -245,9 +245,10 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
         }
 
         // Compute the profit
-        uint256 profit = totalAssets() - assetsBefore; // reverts if loose of assets
+        totalAssets() - assetsBefore; // reverts if loose of assets
 
         // Share the profit to the fee recipient
+        uint256 profit = underlyingAsset.balanceOf(address(this));
         if (performanceFee != 0) {
             uint256 fee = profit * performanceFee / 1e4;
             profit -= fee;
