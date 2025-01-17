@@ -5,14 +5,15 @@ import {ERC4626} from "solady/tokens/ERC4626.sol";
 import {SafeTransferLib} from "solady/utils/SafeTransferLib.sol";
 import {ReentrancyGuard} from "solady/utils/ReentrancyGuard.sol";
 import {AOperator} from "./abstracts/AOperator.sol";
-import {Owned2Step} from "./utils/Owned2Step.sol";
+import {Ownable} from "solady/auth/Ownable.sol";
 import {UtilsLib} from "morpho/libraries/UtilsLib.sol";
 import {Errors} from "./utils/Errors.sol";
+import {ITeller} from "./interfaces/ITeller.sol";
 
 /// @title Wrapper contract
 /// @notice Contract to wrap a boring vault and auto compound the profits
 /// @author 0xtekgrinder
-contract Wrapper is ERC4626, Owned2Step, ReentrancyGuard, AOperator {
+contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
     using SafeTransferLib for address;
     using UtilsLib for uint256;
 
@@ -49,6 +50,14 @@ contract Wrapper is ERC4626, Owned2Step, ReentrancyGuard, AOperator {
      * @notice Symbol of the vault
      */
     string private _symbol;
+    /**
+     * @notice Address of the teller contract that will handle the deposits
+     */
+    address public immutable teller;
+    /**
+     * @notice Address of the underlying asset (e.g. SCUSD)
+     */
+    address public immutable underlyingAsset;
 
     /*//////////////////////////////////////////////////////////////
                             MUTABLE VARIABLES
@@ -85,12 +94,19 @@ contract Wrapper is ERC4626, Owned2Step, ReentrancyGuard, AOperator {
         uint32 initialPerformanceFee,
         uint64 initialVestingPeriod,
         address definitiveAsset,
+        address definitiveUnderlyingAsset,
+        address definitiveTeller,
         string memory definitiveName,
         string memory definitiveSymbol
-    ) Owned2Step(initialOwner) AOperator(initialOperator) {
+    ) AOperator(initialOperator) {
+        _setOwner(initialOwner);
+
         _asset = definitiveAsset;
         _name = definitiveName;
         _symbol = definitiveSymbol;
+
+        teller = definitiveTeller;
+        underlyingAsset = definitiveUnderlyingAsset;
 
         performanceFee = initialPerformanceFee;
         vestingPeriod = initialVestingPeriod;
@@ -237,6 +253,10 @@ contract Wrapper is ERC4626, Owned2Step, ReentrancyGuard, AOperator {
             profit -= fee;
             feeRecipient.safeTransfer(asset(), fee);
         }
+
+        // Deposit the profit in the strategy
+        underlyingAsset.safeApprove(asset(), profit);
+        ITeller(teller).deposit(underlyingAsset, profit, 0);
 
         _handleGain(profit);
     }

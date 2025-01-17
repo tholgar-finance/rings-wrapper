@@ -2,12 +2,12 @@
 pragma solidity 0.8.28;
 
 import {Errors} from "../utils/Errors.sol";
-import {Owned2Step} from "../utils/Owned2Step.sol";
+import {Ownable} from "solady/auth/Ownable.sol";
 
 /// @author 0xtekgrinder
 /// @title AOperator
 /// @notice Abstract contract to allow access only to operator or owner
-abstract contract AOperator is Owned2Step {
+abstract contract AOperator is Ownable {
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
@@ -15,7 +15,7 @@ abstract contract AOperator is Owned2Step {
     /**
      * @notice Event emitted when a output tokens and/or ratios are updated
      */
-    event OperatorUpdated(address oldOperator, address newOperator);
+    event OperatorUpdated(address newOperator);
 
     /*//////////////////////////////////////////////////////////////
                             MUTABLE VARIABLES
@@ -31,7 +31,7 @@ abstract contract AOperator is Owned2Step {
     //////////////////////////////////////////////////////////////*/
 
     modifier onlyOperatorOrOwner() {
-        if (msg.sender != operator && msg.sender != owner) revert Errors.NotOperatorOrOwner();
+        if (msg.sender != operator && msg.sender != owner()) revert Errors.NotOperatorOrOwner();
         _;
     }
 
@@ -52,9 +52,8 @@ abstract contract AOperator is Owned2Step {
     function setOperator(address newOperator) external onlyOwner {
         if (newOperator == address(0)) revert Errors.ZeroAddress();
 
-        address oldOperator = operator;
         operator = newOperator;
 
-        emit OperatorUpdated(oldOperator, newOperator);
+        emit OperatorUpdated(newOperator);
     }
 }
