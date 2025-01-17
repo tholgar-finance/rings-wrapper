@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity 0.8.28;
 
-import {ERC4626} from "solady/tokens/ERC4626.sol";
-import {SafeTransferLib} from "solady/utils/SafeTransferLib.sol";
-import {ReentrancyGuard} from "solady/utils/ReentrancyGuard.sol";
-import {AOperator} from "./abstracts/AOperator.sol";
-import {Ownable} from "solady/auth/Ownable.sol";
-import {UtilsLib} from "morpho/libraries/UtilsLib.sol";
-import {Errors} from "./utils/Errors.sol";
-import {ITeller} from "./interfaces/ITeller.sol";
+import { ERC4626 } from "solady/tokens/ERC4626.sol";
+import { SafeTransferLib } from "solady/utils/SafeTransferLib.sol";
+import { ReentrancyGuard } from "solady/utils/ReentrancyGuard.sol";
+import { AOperator } from "./abstracts/AOperator.sol";
+import { Ownable } from "solady/auth/Ownable.sol";
+import { UtilsLib } from "morpho/libraries/UtilsLib.sol";
+import { Errors } from "./utils/Errors.sol";
+import { ITeller } from "./interfaces/ITeller.sol";
 
 /// @title Wrapper contract
 /// @notice Contract to wrap a boring vault and auto compound the profits
@@ -91,6 +91,7 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
     constructor(
         address initialOwner,
         address initialOperator,
+        address initialFeeRecipient,
         uint32 initialPerformanceFee,
         uint64 initialVestingPeriod,
         address definitiveAsset,
@@ -108,6 +109,7 @@ contract Wrapper is ERC4626, Ownable, ReentrancyGuard, AOperator {
         teller = definitiveTeller;
         underlyingAsset = definitiveUnderlyingAsset;
 
+        feeRecipient = initialFeeRecipient;
         performanceFee = initialPerformanceFee;
         vestingPeriod = initialVestingPeriod;
     }

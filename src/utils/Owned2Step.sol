@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {Owned} from "solmate/auth/Owned.sol";
+import { Owned } from "solmate/auth/Owned.sol";
 
 /// @author 0xtekgrinder
 /// @title Owned2Step contract
@@ -33,7 +33,7 @@ abstract contract Owned2Step is Owned {
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(address _owner) Owned(_owner) {}
+    constructor(address _owner) Owned(_owner) { }
 
     /*//////////////////////////////////////////////////////////////
                              OWNERSHIP LOGIC

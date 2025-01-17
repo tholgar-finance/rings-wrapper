@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity 0.8.28;
 
-import {Errors} from "../utils/Errors.sol";
-import {Ownable} from "solady/auth/Ownable.sol";
+import { Errors } from "../utils/Errors.sol";
+import { Ownable } from "solady/auth/Ownable.sol";
 
 /// @author 0xtekgrinder
 /// @title AOperator
