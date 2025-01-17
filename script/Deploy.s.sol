@@ -5,9 +5,9 @@ import "forge-std/Script.sol";
 import { Wrapper } from "../src/Wrapper.sol";
 
 contract DeployScript is Script {
-    address constant teller = 0x5e39021Ae7D3f6267dc7995BB5Dd15669060DAe0;
-    address constant scUSD = 0xd3DCe716f3eF535C5Ff8d041c1A41C3bd89b97aE;
-    address constant stkscUSD = 0x4D85bA8c3918359c78Ed09581E5bc7578ba932ba;
+    address constant teller = 0x49AcEbF8f0f79e1Ecb0fd47D684DAdec81cc6562;
+    address constant scUSD = 0x3bcE5CB273F0F148010BbEa2470e7b5df84C7812;
+    address constant stkscUSD = 0x455d5f11Fea33A8fa9D3e285930b478B6bF85265;
     address constant owner = 0xb1Cf5c852b908A85624878452A3F3fDb6cE94f05;
     address constant operator = 0xC04FB43668C8C4cFb6e18dCCd0085ED98B1d4008;
 
@@ -25,9 +25,10 @@ contract DeployScript is Script {
             stkscUSD,
             scUSD,
             teller,
-            "Wrapped stkscUSD",
-            "wstkscUSD"
+            "Wrapped stkscETH",
+            "wstkscETH"
         );
+        console.log("Wrapper deployed at:", address(wrapper));
 
         vm.stopBroadcast();
     }

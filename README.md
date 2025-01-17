@@ -1,66 +1,30 @@
-## Foundry
+## Rings Wrapper
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Wrapper contracts on top of stkscUSD and stkscETH to claim the yield and auto compound it. They are intended to be used in integrations with other protocols by being an ERC4626.
 
-Foundry consists of:
+## Contracts
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+wstkscUSD: [0x9fb76f7ce5FCeAA2C42887ff441D46095E494206](https://sonicscan.org/address/0x9fb76f7ce5FCeAA2C42887ff441D46095E494206)  
+wstkscETH: [0xE8a41c62BB4d5863C6eadC96792cFE90A1f37C47](https://sonicscan.org/address/0xE8a41c62BB4d5863C6eadC96792cFE90A1f37C47)  
 
-## Documentation
+## Build
 
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
+Requires to install Foundry.  
 
 ```shell
 $ forge build
 ```
 
-### Test
+## Test
 
 ```shell
 $ forge test
 ```
 
-### Format
+## Ressources
 
-```shell
-$ forge fmt
-```
+Website : [https://rings.money](https://rings.money)
 
-### Gas Snapshots
+Twitter : [Rings_Protocol](https://x.com/Rings_Protocol)
 
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+Discord : [Rings Discord](https://discord.com/invite/5dy4wfWxWU)
